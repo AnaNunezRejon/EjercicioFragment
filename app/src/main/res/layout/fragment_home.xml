@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Cabecera -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:background="#FFFFFF"
+            android:elevation="2dp"
+            android:padding="16dp"
+            android:layout_marginBottom="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvSaludo"
+                android:text="Hola, Usuario"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="#000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tvCodigo"
+                android:text="Código de trabajador: ---"
+                android:textSize="15sp"
+                android:textColor="#555"
+                android:layout_marginTop="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!-- Spinner de filtro -->
+        <TextView
+            android:text="Filtrar por estado:"
+            android:textStyle="bold"
+            android:textColor="#000"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:id="@+id/spFiltro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/borde_spinner"
+            android:padding="8dp"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Botones -->
+        <Button
+            android:id="@+id/btnNuevo"
+            android:text="Crear nuevo ticket"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#A8E6CF"
+            android:textColor="#000"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/btnCerrar"
+            android:text="Cerrar sesión"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FF8C94"
+            android:textColor="#FFF" />
+
+    </LinearLayout>
+</ScrollView>

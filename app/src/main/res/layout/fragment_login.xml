@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="#FAFAFA">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:text="Iniciar sesión"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#000"
+            android:layout_marginBottom="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/etNombre"
+            android:hint="Nombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/etApellido"
+            android:hint="Apellido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/etCodigo"
+            android:hint="Código de trabajador"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp" />
+
+        <Button
+            android:id="@+id/btnEntrar"
+            android:text="Entrar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#90E0EF"
+            android:textColor="#000" />
+
+    </LinearLayout>
+</ScrollView>
