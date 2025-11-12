@@ -1,150 +1,127 @@
-# EjercicioFragment
+# EjercicioFragment  
 
-Abordaje del Problema y Estructura
-El núcleo de la aplicación será la combinación de MVVM y Fragments dentro de esa única Activity.
+Proyecto de práctica desarrollado en **Android Studio** para el ciclo formativo de **Desarrollo de Aplicaciones Multiplataforma (DAM)**.  
+El objetivo principal es **aprender el uso de Fragments**, la **navegación dentro de una sola Activity**, y la **comunicación entre pantallas** en Java.
 
-1. La Única Activity
-Propósito: Actúa como el contenedor principal. Su única responsabilidad es cargar los Fragments y ser el punto de acceso para servicios a nivel de aplicación (como la configuración de la barra de herramientas principal).
-Implementación: Contendrá un FrameLayout para reemplazar los Fragments a medida que el usuario navegue.
-Navegación: Utiliza un menú inferior para manejarse entre fragments
+---
 
-2. Los Fragments (Vistas)
-Cada pantalla o sección de tu aplicación será un Fragment. Estos representan la View en el patrón MVVM.
-Responsabilidad: Mostrar datos e información (UI) y capturar la interacción del usuario (clics, entradas de texto).
-Implementación: Tendrán una referencia al ViewModel asociado y observarán su LiveData para actualizar la UI automáticamente.
+## Objetivos del proyecto  
 
-Hay 3 Fragment:  Editar - Mostrar - Crear (Ticket)
+- Comprender la estructura de una aplicación con una sola `Activity` y varios `Fragments`.  
+- Aprender a realizar transacciones de fragments (`replace`, `addToBackStack`).  
+- Pasar información entre pantallas sin usar bases de datos ni almacenamiento persistente.  
+- Simular un flujo de trabajo con **inicio de sesión, pantalla principal y creación de tickets**.  
 
-4. El ViewModel
-Contiene la lógica y prepara los datos para la UI.
-Responsabilidad: Mantener el estado de los datos  y exponer los datos a la View (el Fragment) a través de LiveData.
-No conoce la View: Solo trata con datos puros y la capa de Modelo/Datos.
+---
 
-Filtrarticket, buscarticket, cambiarticket
+## Estructura del proyecto  
 
+### **MainActivity (Contenedor principal)**  
 
+- Es la **única Activity** del proyecto.  
+- Contiene un `FrameLayout` que actúa como contenedor para todos los fragments.  
+- Al iniciar la aplicación:
+  - Si hay datos cargados en memoria, muestra el `HomeFragment`.  
+  - Si no, carga el `LoginFragment`.  
 
+```java
+if (controlador.haySesionActiva()) {
+    getSupportFragmentManager().beginTransaction()
+            .replace(R.id.contenedor, new HomeFragment())
+            .commit();
+} else {
+    getSupportFragmentManager().beginTransaction()
+            .replace(R.id.contenedor, new LoginFragment())
+            .commit();
+}
+```
 
+### Fragments del proyecto
+#### LoginFragment -------------------------------------------------------------------------------------------------------------------
 
+Pantalla de inicio donde el usuario introduce su nombre, apellido y código de trabajador.
+Los datos se guardan temporalmente en variables estáticas del controlador.
 
+Campos principales:
 
+Nombre
+Apellido
+Código de trabajador
+Botón “Entrar”
 
+Cuando el usuario pulsa Entrar, se cargan los datos y se abre el fragment principal (HomeFragment).
 
+#### HomeFragment-------------------------------------------------------------------------------------------------------------------
 
+Pantalla principal del sistema, donde se muestran los datos del usuario y las opciones de navegación.
 
+Elementos principales:
 
+Mensaje de bienvenida con el nombre del usuario.
+Código del trabajador debajo del saludo.
+Spinner con filtro de estados (solo decorativo por ahora).
 
+Botones:
+Nuevo Ticket → abre el fragment EditarFragment.
+Cerrar Sesión → limpia los datos del usuario y vuelve al login.
 
+#### EditarFragment-------------------------------------------------------------------------------------------------------------------
 
-1. Pantalla Principal: ListaTicketsFragment
-Muestra un resumen de los tickets con opciones de filtrado y creación.
-UI: Usar un RecyclerView para listar los objetos Ticket. Puedes tener pestañas o filtros (tickets abiertos, asignados a mí, etc.).
-Interacción: Al hacer clic en un ítem, navega a DetalleTicketFragment, pasando el ID del ticket.
+Pantalla vacía por el momento.
+Incluye únicamente un botón Guardar, que al pulsarse vuelve a la pantalla anterior.
+Más adelante se usará para crear o editar tickets con campos como descripción, resolución, estado, etc.
 
-+------------------------------------+
-| 🔵 STATUS BAR (Hora, Batería)      |
-+------------------------------------+
-| 🔵 MAIN ACTIVITY (TOOLBAR)         |
-| [≡]  Mis Tickets                   |
-+------------------------------------+
-| ⬜ LISTA TICKETS FRAGMENT          |
-| ---------------------------------- |
-| | [Pestañas/Filtros]               |
-| | Abiertos (12) | En Progreso (5)  |
-| ---------------------------------- |
-| | RecyclerView (Lista de Tickets)  |
-| | ------------------------------ | |
-| | | Ticket ID #123               | |
-| | | Título: No funciona el Wi-Fi | |
-| | | Prioridad: [ALTA]            | |
-| | ------------------------------ | |
-| | ------------------------------ | |
-| | | Ticket ID #124               | |
-| | | Título: Error de Impresión   | |
-| | | Prioridad: [MEDIA]           | |
-| | ------------------------------ | |
-| |                                | |
-| |                                | |
-| ---------------------------------- |
-| [➕] (Botón Flotante: Nuevo Ticket) |
-+------------------------------------+
+#### Controlador-------------------------------------------------------------------------------------------------------------------
 
-2. Creación de Ticket: NuevoTicketFragment
-Un formulario simple para la entrada de datos, reemplazando la lista.
-UI: Campos de texto para el título, descripción, estado, prioridad. Botones para "Cambiar Estado" o "Asignar Técnico".
-Opcional: Un segundo RecyclerView dentro para mostrar los comentarios/actualizaciones del ticket.
+Archivo situado en viewmodel/.
+En esta versión inicial no hay persistencia real; los datos se guardan en memoria mediante variables estáticas.
 
-+------------------------------------+
-| 🔵 STATUS BAR                      |
-+------------------------------------+
-| 🔵 MAIN ACTIVITY (TOOLBAR)         |
-| [←]  Crear Nuevo Ticket         [✓]| (Guardar)
-+------------------------------------+
-| ⬜ NUEVO TICKET FRAGMENT           |
-| ---------------------------------- |
-| | [Campo de Texto] Título:         |
-| | ______________________________ | |
-| | [Campo de Texto] Descripción:    |
-| | ______________________________ | |
-| | [Area de Texto Grande]           |
-| | ______________________________ | |
-| | [Spinner] Prioridad:             |
-| | ▼ Media ______________________ | |
-| |                                | |
-| |                                | |
-| |                                | |
-| ---------------------------------- |
-| [ CREAR Y ENVIAR TICKET ]          |
-+------------------------------------+
+### Estructura de carpetas
+app/
+ └── src/  
+     └── main/  
+         ├── java/com/example/ejerciciofragment/  
+         │    ├── view/  
+         │    │    ├── MainActivity.java  
+         │    │    ├── LoginFragment.java  
+         │    │    ├── HomeFragment.java  
+         │    │    └── EditarFragment.java  
+         │    └── viewmodel/  
+         │         └── controlador.java  
+         └── res/  
+              ├── layout/  
+              │    ├── activity_main.xml  
+              │    ├── fragment_login.xml  
+              │    ├── fragment_home.xml  
+              │    └── fragment_editar.xml  
+              └── values/  
+                   └── strings.xml  
 
-3. Detalle y Gestión: DetalleTicketFragment
-Muestra toda la información del Ticket y permite su modificación.
+### Flujo de navegación  
+Pantalla origen	Acción del usuario	Pantalla destino  
+LoginFragment	Pulsar “Entrar”	HomeFragment  
+HomeFragment	Pulsar “Nuevo Ticket”	EditarFragment  
+HomeFragment	Pulsar “Cerrar sesión”	LoginFragment  
+EditarFragment	Pulsar “Guardar”	HomeFragment  
 
-+------------------------------------+
-| 🔵 STATUS BAR                      |
-+------------------------------------+
-| 🔵 MAIN ACTIVITY (TOOLBAR)         |
-| [←]  Detalle Ticket #123        [⋮]| (Opciones)
-+------------------------------------+
-| ⬜ DETALLE TICKET FRAGMENT         |
-| ---------------------------------- |
-| | Título: No funciona el Wi-Fi     |
-| | Prioridad: [ALTA] (Editable)     |
-| | Asignado a: Juan Pérez (Editable)|
-| ---------------------------------- |
-| | Descripción del Problema:        |
-| | (Texto largo aquí...)            |
-| ---------------------------------- |
-| | [Spinner] Cambiar Estado a:      |
-| | ▼ En Progreso ________________ | |
-| ---------------------------------- |
-| | Historial/Comentarios:           |
-| | - 05/Nov: Abierto por Cliente.   |
-| | - 05/Nov: Asignado a Juan Pérez. |
-| ---------------------------------- |
-| [ AÑADIR COMENTARIO ]              |
-+------------------------------------+
+### Tecnologías utilizadas
 
-➕ NuevoTicketFragment
-Función: Permitir al usuario crear un nuevo ticket.
-UI: EditTexts para título y descripción. Spinners o RadioGroups para seleccionar la prioridad inicial.
-Acción: Un botón para "Crear Ticket" que llama a la función del ViewModel para añadir el nuevo objeto a la base de datos (o la lista en memoria).
+Java (Android Studio)  
+Fragments  
+XML Layouts  
+LinearLayout / ScrollView  
+Spinner y Button  
+Gestión básica de navegación con FragmentManager  
 
+### Próximas mejoras
 
-A. Estructuras de Datos (Model)
+Añadir una lista (RecyclerView) de tickets.  
+Implementar un archivo .txt con datos simulados de tickets.  
+Permitir editar y guardar tickets.  
+Aplicar estilos y colores más parecidos al diseño de Figma.  
 
-Ticket (Clase principal):
-id (int/String)
-titulo (String)
-descripcion (String)
-estado (Enum/String: "Abierto", "En Progreso", "Cerrado")
-prioridad (Enum/String: "Baja", "Media", "Alta")
-fechaCreacion
-asignadoA (Usuario)
+### Autora
 
-Usuario:
-id
-nombre
-rol (Enum/String: "Técnico", "Cliente")
-
-
+Ana Núñez Rejón
+Diseñadora gráfica y estudiante de Desarrollo de Aplicaciones Multiplataforma (DAM).
+Proyecto académico para practicar el manejo de Fragments, transacciones y gestión de datos en memoria en Android Studio.
