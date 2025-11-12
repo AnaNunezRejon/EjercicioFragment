@@ -26,16 +26,14 @@ public class LoginFragment extends Fragment {
         etCodigo = vista.findViewById(R.id.etCodigo);
         btnEntrar = vista.findViewById(R.id.btnEntrar);
 
-        btnEntrar.setOnClickListener(v -> {
+        btnEntrar.setOnClickListener(view -> {
             String nombre = etNombre.getText().toString();
             String apellido = etApellido.getText().toString();
             String codigo = etCodigo.getText().toString();
 
-            // Guardamos el usuario
-            controlador.guardarUsuario(requireContext(), nombre, apellido, codigo);
+            controlador.setUsuario(nombre, apellido, codigo);
 
-            // Pasamos al HomeFragment
-            requireActivity().getSupportFragmentManager().beginTransaction()
+            getParentFragmentManager().beginTransaction()
                     .replace(R.id.contenedor, new HomeFragment())
                     .commit();
         });

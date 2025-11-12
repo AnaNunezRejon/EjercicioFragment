@@ -52,9 +52,9 @@ public class HomeFragment extends Fragment {
         });
 
         // Botón cerrar sesión
-        btnCerrar.setOnClickListener(v -> {
-            controlador.cerrarSesion(getContext());
-            requireActivity().getSupportFragmentManager().beginTransaction()
+        btnCerrar.setOnClickListener(view -> {
+            controlador.cerrarSesion();
+            getParentFragmentManager().beginTransaction()
                     .replace(R.id.contenedor, new LoginFragment())
                     .commit();
         });
