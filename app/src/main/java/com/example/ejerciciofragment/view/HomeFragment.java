@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment {
 
         // Botón cerrar sesión
         btnCerrar.setOnClickListener(view -> {
-            controlador.cerrarSesion();
+            controlador.borrarSesion(getContext());
             getParentFragmentManager().beginTransaction()
                     .replace(R.id.contenedor, new LoginFragment())
                     .commit();

@@ -12,6 +12,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        controlador.cargarSesion(this);
+
         if (controlador.haySesionActiva()) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.contenedor, new HomeFragment())

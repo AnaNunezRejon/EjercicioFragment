@@ -32,6 +32,7 @@ public class LoginFragment extends Fragment {
             String codigo = etCodigo.getText().toString();
 
             controlador.setUsuario(nombre, apellido, codigo);
+            controlador.guardarSesion(getContext(), nombre, apellido, codigo);
 
             getParentFragmentManager().beginTransaction()
                     .replace(R.id.contenedor, new HomeFragment())
