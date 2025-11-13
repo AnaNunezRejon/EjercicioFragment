@@ -1,0 +1,5 @@
+1; Marta Pérez; No carga la app;; NUEVO
+1; Antonio López; Error al guardar datos;En prooceso; ABIERTO
+1; Margarita García; Pantalla en blanco;Reinstalar aplicaciones; PENDIENTE
+1; Eugenia Rodríguez; No me deja logarme; Faltaba un numero en el DNI; RESUELTO
+1; Almudena Díaz; Problema de verificación de correo; No tenía bien puesto el @; CERRADO
