@@ -9,10 +9,16 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ejerciciofragment.R;
+import com.example.ejerciciofragment.model.Ticket;
 import com.example.ejerciciofragment.viewmodel.controlador;
+
+import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
@@ -20,30 +26,49 @@ public class HomeFragment extends Fragment {
     private Spinner spFiltro;
     private Button btnNuevo, btnCerrar;
 
+    private RecyclerView rvTickets;
+
+    //private TicketAdapter adapter;
+    private ArrayList<Ticket> listaTickets;
+
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
         View vista = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // ELEMENTOS DE LA VISTA
         tvSaludo = vista.findViewById(R.id.tvSaludo);
         tvCodigo = vista.findViewById(R.id.tvCodigo);
         spFiltro = vista.findViewById(R.id.spFiltro);
         btnNuevo = vista.findViewById(R.id.btnNuevo);
         btnCerrar = vista.findViewById(R.id.btnCerrar);
+        rvTickets = vista.findViewById(R.id.rvTickets);
 
-        // Mostrar los datos del usuario guardados
+        // MOSTRAR NOMBRE Y CODIGO DEL USUARIO
         tvSaludo.setText("Hola, " + controlador.getNombre() + " " + controlador.getApellido());
         tvCodigo.setText("Código de trabajador: " + controlador.getCodigo());
 
-        // Llenar el spinner con opciones
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+        // CARGAR SPINNER
+        ArrayAdapter<CharSequence> adapterSpinner = ArrayAdapter.createFromResource(
                 getContext(),
                 R.array.estados_filtro,
                 android.R.layout.simple_spinner_item
         );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spFiltro.setAdapter(adapter);
+        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spFiltro.setAdapter(adapterSpinner);
 
-        // Botón para crear nuevo ticket
+        // LEER TICKETS DEL FICHERO
+        listaTickets = controlador.leerTickets(getContext());
+
+        // CONFIGURAR RECYCLER VIEW
+        // rvTickets.setLayoutManager(new LinearLayoutManager(getContext()));
+        // adapter = new TicketAdapter(listaTickets);
+        // rvTickets.setAdapter(adapter);
+
+        // BOTÓN NUEVO TICKET
         btnNuevo.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.contenedor, new EditarFragment())
@@ -51,9 +76,9 @@ public class HomeFragment extends Fragment {
                     .commit();
         });
 
-        // Botón cerrar sesión
-        btnCerrar.setOnClickListener(view -> {
-            controlador.borrarSesion(getContext());
+        // BOTÓN CERRAR SESIÓN
+        btnCerrar.setOnClickListener(v -> {
+            controlador.borrarSesion(getContext()); // SharedPreferences
             getParentFragmentManager().beginTransaction()
                     .replace(R.id.contenedor, new LoginFragment())
                     .commit();
