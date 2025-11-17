@@ -2,6 +2,7 @@ package com.example.ejerciciofragment.viewmodel;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.example.ejerciciofragment.model.Estado;
 import com.example.ejerciciofragment.model.Ticket;
@@ -9,8 +10,10 @@ import com.example.ejerciciofragment.model.Ticket;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class controlador {
@@ -67,33 +70,41 @@ public class controlador {
     }
 
 
-    // Leer tickets desde fichero de texto
-    public static ArrayList<Ticket> leerTickets(Context ctx) {
-        ArrayList<Ticket> lista = new ArrayList<>();
+    //Crear archivo inicial en /files si no existe
+    public static void copiarTicketsDesdeAssets(Context ctx) {
 
-        // 1. Localizamos la ruta del fichero en la memoria interna de la app
-        File directorio = ctx.getFilesDir();
-        File fichero = new File(directorio, "tickets.txt");
+        File destino = new File(ctx.getFilesDir(), "tickets.txt");
 
-        // 2. Si el fichero NO existe, lo creamos con un ticket de ejemplo
-        if (!fichero.exists()) {
-            try {
-                // FileWriter + BufferedWriter -> Ficheros de caracteres
-                FileWriter fw = new FileWriter(fichero);
-                BufferedWriter bw = new BufferedWriter(fw);
+        if (destino.exists()) {
 
-                // Formato: id;nombre;descripcion;resolucion;ESTADO
-                bw.write("1;Usuario de prueba;Descripción de ejemplo;Resolución de ejemplo;NUEVO");
-                bw.newLine();
-
-                bw.close();
-                fw.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            return;
         }
 
-        // 3. Leemos el fichero línea a línea con FileReader + BufferedReader
+        try {
+            InputStream is = ctx.getAssets().open("tickets.txt");
+            FileOutputStream fos = new FileOutputStream(destino);
+
+            int dato = is.read();
+            while (dato != -1) {
+                fos.write(dato);
+                dato = is.read();
+            }
+
+            is.close();
+            fos.close();
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static ArrayList<Ticket> leerTickets(Context ctx) {
+
+        ArrayList<Ticket> lista = new ArrayList<>();
+        File fichero = new File(ctx.getFilesDir(), "tickets.txt");
+
         try {
             FileReader fr = new FileReader(fichero);
             BufferedReader br = new BufferedReader(fr);
@@ -101,18 +112,20 @@ public class controlador {
             String linea = br.readLine();
 
             while (linea != null) {
+
+
                 String[] partes = linea.split(";");
 
-                // Comprobamos que la línea tiene las 5 partes
                 if (partes.length == 5) {
                     int id = Integer.parseInt(partes[0]);
-                    String nombreTicket = partes[1];
+                    String nombre = partes[1];
                     String desc = partes[2];
                     String resol = partes[3];
                     Estado estado = Estado.valueOf(partes[4]);
 
-                    Ticket t = new Ticket(id, nombreTicket, desc, resol, estado);
-                    lista.add(t);
+                    lista.add(new Ticket(id, nombre, desc, resol, estado));
+                } else {
+                    Log.e("ERROR", "Formato de línea incorrecto: " + linea);
                 }
 
                 linea = br.readLine();
@@ -127,6 +140,39 @@ public class controlador {
 
         return lista;
     }
+
+
+    public static void guardarTickets(Context ctx, ArrayList<Ticket> lista) {
+
+        File fichero = new File(ctx.getFilesDir(), "tickets.txt");
+
+        try {
+            FileWriter fw = new FileWriter(fichero, false);
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            for (int i = 0; i < lista.size(); i++) {
+                Ticket t = lista.get(i);
+
+                bw.write(
+                        t.getId() + ";" +
+                                t.getNombreUsuario() + ";" +
+                                t.getDescripcion() + ";" +
+                                t.getResolucion() + ";" +
+                                t.getEstado().toString()
+                );
+
+                bw.newLine();
+            }
+
+            bw.close();
+            fw.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 }
 

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ejerciciofragment.R;
@@ -27,8 +28,7 @@ public class HomeFragment extends Fragment {
     private Button btnNuevo, btnCerrar;
 
     private RecyclerView rvTickets;
-
-    //private TicketAdapter adapter;
+    private TicketAdapter adapter;
     private ArrayList<Ticket> listaTickets;
 
     @Nullable
@@ -36,6 +36,9 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        getContext().deleteFile("tickets.txt");  // <-- SOLO UNA VEZ
+        controlador.copiarTicketsDesdeAssets(getContext());
+        listaTickets = controlador.leerTickets(getContext());
 
         View vista = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -49,7 +52,7 @@ public class HomeFragment extends Fragment {
 
         // MOSTRAR NOMBRE Y CODIGO DEL USUARIO
         tvSaludo.setText("Hola, " + controlador.getNombre() + " " + controlador.getApellido());
-        tvCodigo.setText("Código de trabajador: " + controlador.getCodigo());
+        tvCodigo.setText("Código: " + controlador.getCodigo());
 
         // CARGAR SPINNER
         ArrayAdapter<CharSequence> adapterSpinner = ArrayAdapter.createFromResource(
@@ -64,9 +67,9 @@ public class HomeFragment extends Fragment {
         listaTickets = controlador.leerTickets(getContext());
 
         // CONFIGURAR RECYCLER VIEW
-        // rvTickets.setLayoutManager(new LinearLayoutManager(getContext()));
-        // adapter = new TicketAdapter(listaTickets);
-        // rvTickets.setAdapter(adapter);
+        rvTickets.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new TicketAdapter(listaTickets);
+        rvTickets.setAdapter(adapter);
 
         // BOTÓN NUEVO TICKET
         btnNuevo.setOnClickListener(v -> {
@@ -78,7 +81,7 @@ public class HomeFragment extends Fragment {
 
         // BOTÓN CERRAR SESIÓN
         btnCerrar.setOnClickListener(v -> {
-            controlador.borrarSesion(getContext()); // SharedPreferences
+            controlador.borrarSesion(getContext());
             getParentFragmentManager().beginTransaction()
                     .replace(R.id.contenedor, new LoginFragment())
                     .commit();

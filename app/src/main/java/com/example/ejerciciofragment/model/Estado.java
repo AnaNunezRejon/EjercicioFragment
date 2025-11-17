@@ -4,6 +4,6 @@ public enum Estado {
     NUEVO,
     ABIERTO,
     PENDIENTE,
-    RESULETO,
+    RESUELTO,
     CERRADO
 }

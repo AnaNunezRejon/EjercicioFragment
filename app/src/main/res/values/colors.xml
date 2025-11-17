@@ -7,4 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="estado_nuevo">#A6EFD3</color>       <!-- VERDE -->
+    <color name="estado_abierto">#F4D67A</color>     <!-- AMARILLO -->
+    <color name="estado_pendiente">#FFB27A</color>   <!-- NARANJA -->
+    <color name="estado_resuelto">#C8A3FF</color>    <!-- MORADO -->
+    <color name="estado_cerrado">#FF9AA2</color>     <!-- ROJO -->
+    <color name="gris_suave">#F3F3F3</color>
+
 </resources>
