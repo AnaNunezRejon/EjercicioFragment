@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -29,16 +30,22 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView rvTickets;
     private TicketAdapter adapter;
+
     private ArrayList<Ticket> listaTickets;
+    private ArrayList<Ticket> listaOriginal;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        getContext().deleteFile("tickets.txt");  // <-- SOLO UNA VEZ
+
+
+        getContext().deleteFile("tickets.txt");
         controlador.copiarTicketsDesdeAssets(getContext());
-        listaTickets = controlador.leerTickets(getContext());
+        listaOriginal = controlador.leerTickets(getContext());
+
+        listaTickets = new ArrayList<>(listaOriginal);
 
         View vista = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -62,6 +69,22 @@ public class HomeFragment extends Fragment {
         );
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spFiltro.setAdapter(adapterSpinner);
+
+        spFiltro.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
+
+                String seleccionado = spFiltro.getSelectedItem().toString();
+
+                filtrarTickets(seleccionado);
+            }
+
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> parent) {}
+        });
+
+
+
 
         // LEER TICKETS DEL FICHERO
         listaTickets = controlador.leerTickets(getContext());
@@ -89,4 +112,25 @@ public class HomeFragment extends Fragment {
 
         return vista;
     }
+
+    private void filtrarTickets(String estado) {
+
+        listaTickets.clear();
+
+        if (estado.equals("Todos")) {
+            listaTickets.addAll(listaOriginal);
+        } else {
+
+            for (int i = 0; i < listaOriginal.size(); i++) {
+                Ticket t = listaOriginal.get(i);
+
+                if (t.getEstado().toString().equals(estado)) {
+                    listaTickets.add(t);
+                }
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+    }
+
 }

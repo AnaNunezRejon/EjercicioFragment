@@ -142,12 +142,24 @@ public class controlador {
     }
 
 
+    public static Ticket getTicketPorId(ArrayList<Ticket> lista, int id) {
+
+            for (int i = 0; i < lista.size(); i++) {
+                Ticket t = lista.get(i);
+                if(t.getId()== id){
+                    return t;
+                }
+
+            }
+        return null;
+    }
+
     public static void guardarTickets(Context ctx, ArrayList<Ticket> lista) {
 
         File fichero = new File(ctx.getFilesDir(), "tickets.txt");
 
         try {
-            FileWriter fw = new FileWriter(fichero, false);
+            FileWriter fw = new FileWriter(fichero, false); // sobrescribir todo
             BufferedWriter bw = new BufferedWriter(fw);
 
             for (int i = 0; i < lista.size(); i++) {
@@ -171,7 +183,6 @@ public class controlador {
             e.printStackTrace();
         }
     }
-
 
 
 }

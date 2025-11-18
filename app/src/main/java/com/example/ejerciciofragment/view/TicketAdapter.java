@@ -1,12 +1,14 @@
 package com.example.ejerciciofragment.view;
 
 import android.graphics.drawable.GradientDrawable;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ejerciciofragment.R;
@@ -37,6 +39,24 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketView
         holder.tvTitulo.setText("Ticket #" + t.getId());
         holder.tvRemitente.setText("Remitente: " + t.getNombreUsuario());
         holder.tvDescripcion.setText(t.getDescripcion());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditarFragment editarFragment = new EditarFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("id", t.getId());
+                editarFragment.setArguments(bundle);
+
+                androidx.fragment.app.FragmentActivity activity =
+                        (androidx.fragment.app.FragmentActivity) v.getContext();
+
+                activity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.contenedor, editarFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
 
         // COLORES SEGÚN ESTADO
         int color = 0;
@@ -69,9 +89,6 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketView
     }
 
 
-
-        TextView tvID, tvNombre, tvEstado;
-
         public class TicketViewHolder extends RecyclerView.ViewHolder {
 
             TextView tvTitulo, tvRemitente, tvDescripcion;
@@ -85,3 +102,5 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketView
         }
 
 }
+
+

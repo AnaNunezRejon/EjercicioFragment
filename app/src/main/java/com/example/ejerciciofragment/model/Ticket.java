@@ -39,4 +39,12 @@ public class Ticket {
     public void setEstado(Estado estado) {
         this.estado = estado;
     }
+
+    public void setResolucion(String resolucion) {
+        this.resolucion = resolucion;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

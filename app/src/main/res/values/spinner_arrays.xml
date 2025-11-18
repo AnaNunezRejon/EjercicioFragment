@@ -7,4 +7,12 @@
         <item>RESUELTO</item>
         <item>CERRADO</item>
     </string-array>
+
+    <string-array name="estados">
+        <item>NUEVO</item>
+        <item>ABIERTO</item>
+        <item>PENDIENTE</item>
+        <item>RESUELTO</item>
+        <item>CERRADO</item>
+    </string-array>
 </resources>
