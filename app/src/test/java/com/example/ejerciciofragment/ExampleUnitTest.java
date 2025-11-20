@@ -97,5 +97,29 @@ public class ExampleUnitTest {
 
             assertEquals(Estado.NUEVO, t.getEstado());
         }
+
+
+
+        @Test
+        public void test_getEstado_devuelveEstadoCorrecto() {
+             // Crear ticket con estado NUEVO
+             Ticket t = new Ticket(1, "Ana", "Prueba", "", Estado.NUEVO);
+
+             // Comprobar que el estado devuelto es NUEVO
+             assertEquals(Estado.NUEVO, t.getEstado());
+         }
+
+         @Test
+         public void test_setEstado_modificaElEstadoCorrectamente() {
+                Ticket t = new Ticket(1, "Ana", "Prueba", "", Estado.NUEVO);
+
+             // Cambiar a ABIERTO
+             t.setEstado(Estado.ABIERTO);
+
+                // Comprobar que realmente se cambió
+             assertEquals(Estado.ABIERTO, t.getEstado());
+        }
+
+
     }
 
