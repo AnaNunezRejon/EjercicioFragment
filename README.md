@@ -2,130 +2,161 @@
 
 
 
-# EjercicioFragment  
+#  EjercicioFragment – Proyecto Android con Fragments (DAM)
 
-Proyecto de práctica desarrollado en **Android Studio** para el ciclo formativo de **Desarrollo de Aplicaciones Multiplataforma (DAM)**.  
-El objetivo principal es **aprender el uso de Fragments**, la **navegación dentro de una sola Activity**, y la **comunicación entre pantallas** en Java.
-
----
-
-## Objetivos del proyecto  
-
-- Comprender la estructura de una aplicación con una sola `Activity` y varios `Fragments`.  
-- Aprender a realizar transacciones de fragments (`replace`, `addToBackStack`).  
-- Pasar información entre pantallas sin usar bases de datos ni almacenamiento persistente.  
-- Simular un flujo de trabajo con **inicio de sesión, pantalla principal y creación de tickets**.  
+Proyecto desarrollado en **Android Studio** como práctica para el módulo de **Programación Multimedia y Dispositivos Móviles (DAM)**.  
+El objetivo es aprender a trabajar con **Fragments**, **navegación en una sola Activity** y **gestión de datos en memoria**, simulando un sistema básico de tickets.
 
 ---
 
-## Estructura del proyecto  
+##  Objetivos del proyecto
 
-### **MainActivity (Contenedor principal)**  
+- Comprender la arquitectura **Single-Activity** con múltiples **Fragments**.  
+- Realizar transacciones de navegación entre fragments.  
+- Practicar la comunicación entre pantallas usando un controlador.  
+- Simular un flujo real de aplicación con:
+  - Inicio de sesión  
+  - Pantalla principal  
+  - Creación / edición de tickets  
 
-- Es la **única Activity** del proyecto.  
-- Contiene un `FrameLayout` que actúa como contenedor para todos los fragments.  
-- Al iniciar la aplicación:
-  - Si hay datos cargados en memoria, muestra el `HomeFragment`.  
-  - Si no, carga el `LoginFragment`.  
+---
 
-```java
-if (controlador.haySesionActiva()) {
-    getSupportFragmentManager().beginTransaction()
-            .replace(R.id.contenedor, new HomeFragment())
-            .commit();
-} else {
-    getSupportFragmentManager().beginTransaction()
-            .replace(R.id.contenedor, new LoginFragment())
-            .commit();
-}
-```
+##  Arquitectura general
 
-### Fragments del proyecto
-#### LoginFragment -------------------------------------------------------------------------------------------------------------------
+El proyecto sigue una estructura sencilla basada en **View / ViewModel**:
 
-Pantalla de inicio donde el usuario introduce su nombre, apellido y código de trabajador.
-Los datos se guardan temporalmente en variables estáticas del controlador.
+- **View:** Activity + Fragments  
+- **ViewModel:** Clase `controlador` que gestiona los datos en memoria  
 
-Campos principales:
+El flujo principal se ejecuta siempre dentro de una sola Activity, que actúa como contenedor de los fragments.
 
-Nombre
-Apellido
-Código de trabajador
-Botón “Entrar”
+---
 
-Cuando el usuario pulsa Entrar, se cargan los datos y se abre el fragment principal (HomeFragment).
+##  Fragments del proyecto
 
-#### HomeFragment-------------------------------------------------------------------------------------------------------------------
+### 🔹 LoginFragment
 
-Pantalla principal del sistema, donde se muestran los datos del usuario y las opciones de navegación.
+Pantalla inicial donde el usuario introduce:
 
-Elementos principales:
+- Nombre  
+- Apellido  
+- Código de trabajador  
 
-Mensaje de bienvenida con el nombre del usuario.
-Código del trabajador debajo del saludo.
-Spinner con filtro de estados (solo decorativo por ahora).
+Al pulsar **Entrar**:  
+Los datos se guardan temporalmente en el controlador y se navega al **HomeFragment**.  
+Incluye validación básica de campos vacíos.
 
-Botones:
-Nuevo Ticket → abre el fragment EditarFragment.
-Cerrar Sesión → limpia los datos del usuario y vuelve al login.
+---
 
-#### EditarFragment-------------------------------------------------------------------------------------------------------------------
+### 🔹 HomeFragment
 
-Pantalla vacía por el momento.
-Incluye únicamente un botón Guardar, que al pulsarse vuelve a la pantalla anterior.
-Más adelante se usará para crear o editar tickets con campos como descripción, resolución, estado, etc.
+Pantalla principal del sistema. Muestra:
 
-#### Controlador-------------------------------------------------------------------------------------------------------------------
+- Saludo personalizado con el nombre del usuario  
+- Código del trabajador  
+- Spinner decorativo con estados de ticket  
+- Botones principales:
+  - **Nuevo Ticket**
+  - **Cerrar sesión**
 
-Archivo situado en viewmodel/.
-En esta versión inicial no hay persistencia real; los datos se guardan en memoria mediante variables estáticas.
+Desde aquí se accede al EditarFragment y también se puede cerrar sesión, lo que limpia los datos del controlador.
 
-### Estructura de carpetas
+---
+
+### 🔹 EditarFragment
+
+Pantalla destinada a crear o editar un ticket.  
+Versión actual:
+
+- Campos básicos (ID, usuario, estado, descripción, resolución)  
+- Botón **Guardar** que registra el ticket en memoria y vuelve al HomeFragment  
+
+En futuras versiones soportará edición real y validación avanzada.
+
+---
+
+### 🔹 Controlador (ViewModel)
+
+Clase que almacena:
+
+- Datos del usuario en sesión  
+- Lista de tickets  
+- Operaciones de creación y consulta  
+
+Actúa como una “base de datos” en memoria en esta fase inicial del proyecto.
+
+---
+
+##  Estructura del proyecto
+
 app/
- └── src/  
-     └── main/  
-         ├── java/com/example/ejerciciofragment/  
-         │    ├── view/  
-         │    │    ├── MainActivity.java  
-         │    │    ├── LoginFragment.java  
-         │    │    ├── HomeFragment.java  
-         │    │    └── EditarFragment.java  
-         │    └── viewmodel/  
-         │         └── controlador.java  
-         └── res/  
-              ├── layout/  
-              │    ├── activity_main.xml  
-              │    ├── fragment_login.xml  
-              │    ├── fragment_home.xml  
-              │    └── fragment_editar.xml  
-              └── values/  
-                   └── strings.xml  
+└── src/main/
+├── java/com/example/ejerciciofragment/
+│ ├── view/
+│ │ ├── MainActivity.java
+│ │ ├── LoginFragment.java
+│ │ ├── HomeFragment.java
+│ │ └── EditarFragment.java
+│ └── viewmodel/
+│ └── controlador.java
+└── res/
+├── layout/
+│ ├── activity_main.xml
+│ ├── fragment_login.xml
+│ ├── fragment_home.xml
+│ └── fragment_editar.xml
+└── values/
+└── strings.xml
 
-### Flujo de navegación  
-Pantalla origen	Acción del usuario	Pantalla destino  
-LoginFragment	Pulsar “Entrar”	HomeFragment  
-HomeFragment	Pulsar “Nuevo Ticket”	EditarFragment  
-HomeFragment	Pulsar “Cerrar sesión”	LoginFragment  
-EditarFragment	Pulsar “Guardar”	HomeFragment  
 
-### Tecnologías utilizadas
+---
 
-Java (Android Studio)  
-Fragments  
-XML Layouts  
-LinearLayout / ScrollView  
-Spinner y Button  
-Gestión básica de navegación con FragmentManager  
+##  Flujo de navegación
 
-### Próximas mejoras
+| Pantalla Origen     | Acción del usuario    | Pantalla destino |
+|---------------------|------------------------|------------------|
+| LoginFragment       | Entrar                 | HomeFragment     |
+| HomeFragment        | Nuevo Ticket           | EditarFragment   |
+| HomeFragment        | Cerrar sesión          | LoginFragment    |
+| EditarFragment      | Guardar                | HomeFragment     |
 
-Añadir una lista (RecyclerView) de tickets.  
-Implementar un archivo .txt con datos simulados de tickets.  
-Permitir editar y guardar tickets.  
-Aplicar estilos y colores más parecidos al diseño de Figma.  
+---
 
-### Autora
+##  Tecnologías utilizadas
 
-Ana Núñez Rejón
-Diseñadora gráfica y estudiante de Desarrollo de Aplicaciones Multiplataforma (DAM).
-Proyecto académico para practicar el manejo de Fragments, transacciones y gestión de datos en memoria en Android Studio.
+- Java  
+- Fragments  
+- XML Layouts  
+- FragmentManager  
+- LinearLayout y ScrollView  
+- Spinner y Buttons  
+- Controlador en memoria (ViewModel simple)  
+
+---
+
+##  Mejoras implementadas
+
+- Validación en Login  
+- Control de sesión activo  
+- Navegación fluida entre fragments  
+- Limpieza y organización del código  
+- Base del sistema de tickets funcional  
+
+---
+
+##  Próximas mejoras
+
+- Integrar un **RecyclerView** para mostrar los tickets.  
+- Leer tickets desde un archivo **.txt** o **.json**.  
+- Guardar datos al cerrar la app (SharedPreferences o ficheros).  
+- Añadir colores según estado del ticket.  
+- Crear modo edición completo.  
+- Mejorar el diseño según el prototipo de Figma.  
+
+---
+
+##  Autora
+
+**Ana Núñez Rejón**  
+Diseñadora gráfica y estudiante de **Desarrollo de Aplicaciones Multiplataforma (DAM)**.  
+Proyecto: Uso de Fragments, navegación y gestión de datos en memoria dentro de Android Studio.
