@@ -1,3 +1,6 @@
+<img width="1029" height="524" alt="image" src="https://github.com/user-attachments/assets/00b4f585-ae66-42a9-ae54-6737edc470bc" />
+
+
 # EjercicioFragment  
 
 Proyecto de práctica desarrollado en **Android Studio** para el ciclo formativo de **Desarrollo de Aplicaciones Multiplataforma (DAM)**.  
