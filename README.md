@@ -1,4 +1,5 @@
-<img width="1029" height="524" alt="image" src="https://github.com/user-attachments/assets/00b4f585-ae66-42a9-ae54-6737edc470bc" />
+<img width="1028" height="520" alt="image" src="https://github.com/user-attachments/assets/a9073a79-3820-4d28-9a09-aeca794b689f" />
+
 
 
 # EjercicioFragment  
